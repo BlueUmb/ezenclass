@@ -1,0 +1,12 @@
+JDK - temurin : https://adoptium.net/temurin/releases?version=11
+JDK환경변수 설정하기
+Visual studio Code : https://code.visualstudio.com/
+Eclipse IDE for Java Developers : https://www.eclipse.org/downloads/download.php?file=/technology/epp/downloads/release/2022-06/R/eclipse-java-2022-06-R-win32-x86_64.zip
+git 다운로드 : https://git-scm.com/downloads
+
+eclipse UTF-8적용, JDK 11로 낮추기(compiler 11)
+
+
+
+
+08/18 JDK 17버전 추가
