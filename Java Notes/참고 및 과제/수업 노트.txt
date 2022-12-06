@@ -29,3 +29,4 @@ int형 변수에 2진수,10진수,8진수,16진수를 넣을때
 
 UML tool : https://gitmind.com/kr/uml-diagram-tool.html#_1 - gitmind
 
+자료구조 선형,비선형구조 : https://uni.rejoice-it.com/m/entry/JAVA-%EC%9E%90%EB%A3%8C%EA%B5%AC%EC%A1%B0-%EB%8B%A8%EC%88%9C%EA%B5%AC%EC%A1%B0-%EC%84%A0%ED%98%95%EA%B5%AC%EC%A1%B0-%EB%B9%84%EC%84%A0%ED%98%95%EA%B5%AC%EC%A1%B0-1
