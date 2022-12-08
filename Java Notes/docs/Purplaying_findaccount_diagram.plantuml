@@ -2,7 +2,7 @@
 actor User
 participant "Web Client" as C
 participant "Purplaying Server" as S
-database "DBMS Server" as D
+database "Purplaying DB" as D
 participant "SMTP" as M
 
 User -> C:3. 아이디 찾기 페이지 요청\nGET:[/purplaying/user/findaccount]
