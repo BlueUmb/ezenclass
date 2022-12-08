@@ -42,7 +42,6 @@ loop
     C --> User: 게시글 리스트 페이지 노출
 end
 
-
 deactivate C
 
 
