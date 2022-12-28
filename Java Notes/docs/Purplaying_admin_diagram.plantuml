@@ -56,11 +56,7 @@ group 관리자페이지(유저권한)
     end
 end
 
-User -> C:헤더 (펀딩게시글) 버튼선택
-activate C
-C --> User: 관리자페이지(펀딩게시글) 노출
-deactivate C
-
+newpage
 
 group 관리자페이지(펀딩 게시글)
     User -> C:관리자 페이지(펀딩 게시글) 요청\nGET:[/purplaying/admin/projectlist]
@@ -113,13 +109,10 @@ group 관리자페이지(펀딩 게시글)
     end
 end
 
-User -> C:헤더 (사이트배너) 버튼선택
-activate C
-C --> User: 관리자페이지(사이트배너) 노출
-deactivate C
+newpage
 
-group 관리자페이지(사이트배너)
-    User -> C:관리자 페이지(사이트배너) 요청\nGET:[/purplaying/admin/bannerlist]
+group 관리자페이지(사이트배너-썸네일)
+    User -> C:관리자 페이지(사이트배너-썸네일) 요청\nGET:[/purplaying/admin/bannerlist]
 
     activate C
     C -> S:static asset 요청(HTML/CSS)
@@ -136,19 +129,150 @@ group 관리자페이지(사이트배너)
 
     loop 
         User -> C:설정하기 버튼 선택
-        C -> S:배너 설정 요청
+        C -> S: Modal 썸네일 이미지 미리보기 요청
 
         activate S
-        S -> D: 배너 insert 요청
-        D --> S: 배너 insert  응답
-        S --> C: 관리자페이지(사이트배너) redirection
-        deactivate S
+        S -> D: 썸네일 select 요청
+        D --> S: 썸네일 select  응답
+        S --> C: Modal 썸네일 미리보기 응답
+        C --> User: 미리보기 Modal 노출
 
-        C --> User: 관리자 페이지(펀딩 게시글)노출
-        deactivate C
+        alt 등록버튼 선택
+            User -> C:등록버튼 선택
+            C -> S: Modal 썸네일 이미지 배너 설정 요청
+            S -> D: 썸네일 배너 update 요청
+            D --> S: 썸네일 배너 update 응답
+            S --> C: 관리자페이지(사이트배너-썸네일) redirection
+            
+            deactivate S
+
+            C --> User: 관리자 페이지(사이트배너-썸네일)노출
+            deactivate C
+        end
+
     end
 end
 
+newpage
 
+group 관리자페이지(사이트배너-업로드)
+    User -> C:관리자 페이지(사이트배너-업로드) 요청\nGET:[/purplaying/admin/fileUpload]
+
+    activate C
+    C -> S:static asset 요청(HTML/CSS)
+    activate S
+
+    S -> D: 프로젝트 DB select 요청
+    D --> S: 프로젝트 DB select 응답
+
+    S -> D: 배너 DB select 요청
+    D --> S: 배너 DB select 응답
+
+    S --> C: static asset 응답(HTML/CSS)
+    deactivate S
+
+    alt 업로드선택
+        User -> C:업로드 버튼 선택
+        C -> S: Modal 파일업로드 요청
+        activate S
+        S --> C: Modal 파일업로드 응답
+        C --> User: Modal 노출
+
+        User -> C: 파일선택 및 업로드버튼 선택
+        C -> S: 파일 저장 요청
+        S --> C: 파일 저장 응답 및 미리보기 응답
+
+        alt 저장버튼 선택
+            User -> C: 저장버튼 선택
+            C -> S: 파일 저장 요청
+            S -> D: 파일 insert요청
+            D --> S: 파일 insert응답
+            S --> C: 관리자페이지(사이트배너-업로드) redirection
+            C --> User: 관리자페이지(사이트배너-업로드) 노출
+        else 취소버튼 선택
+            User -> C: 취소버튼 선택
+            C -> S: 파일 삭제 요청
+            S --> C: 파일 삭제 응답 및 미리보기 초기화 응답
+        end
+
+        deactivate S
+    else 파일설정 버튼선택
+        loop 
+            User -> C:설정하기 버튼 선택
+            C -> S: Modal 이미지 미리보기 요청
+
+            activate S
+            S --> C: Modal 미리보기 응답
+            C --> User: 미리보기 Modal 노출
+
+            alt 등록버튼 선택
+                User -> C:등록버튼 선택
+                C -> S: Modal 썸네일 이미지 배너 설정 요청
+                S -> D: 썸네일 배너 update 요청
+                D --> S: 썸네일 배너 update 응답
+                S --> C: 관리자페이지(사이트배너-업로드) redirection
+                
+                deactivate S
+                C --> User: 관리자 페이지(사이트배너-업로드)노출
+                deactivate C
+
+            end
+        end
+    end
+end
+
+newpage
+
+participant "SMTP" as M
+
+group 관리자페이지(단체메일)
+    User -> C:관리자 페이지(단체메일) 요청\nGET:[/purplaying/admin/sendmessage]
+
+    activate C
+    C -> S:static asset 요청(HTML/CSS)
+    activate S
+    
+    S -> D: 유저 DB select 요청
+    D --> S: 유저 DB select 응답
+
+    S --> C: static asset 응답(HTML/CSS)
+    deactivate S
+
+    loop 
+        User -> C: 메일제목 입력
+        alt 선택하기버튼 선택
+            User -> C: 선택하기버튼 선택
+
+            C -> S: Modal 유저 리스트 요청
+            activate S
+
+            S --> C: Modal 유저 리스트 응답
+
+            alt 유저선택
+                User -> C: 유저 선택
+                C -> S: 유저 번호 저장 요청
+                S --> C: 유저 번호 저장 응답
+            else 페이지선택
+                User -> C: 페이지 선택
+                C -> S: 해당페이지 유저 리스트 요청
+                S -> D: 해당페이지 유저 select 요청
+                D --> S: 해당페이지 유저 select 응답
+                S --> C: 해당페이지 유저 리스트 응답
+                C --> User: Modal 유저리스트 노출
+            end
+            User -> C:저장하기 버튼 선택
+            C -> S : 저장된 유저 번호 요청
+            S --> C: 저장된 유저 번호 응답
+        end
+
+        User -> C: 메일 내용 입력 및 보내기버튼 선택
+        C -> S: 입력되어있는 정보 메일전송 요청
+        S -> M: 메일전송
+        
+        deactivate S
+        deactivate C
+
+    end
+end
 
 @enduml

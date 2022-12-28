@@ -1,0 +1,35 @@
+@startuml
+
+actor User
+participant "Web Client" as C
+participant "Purplaying Server" as S
+database "Purplaying DB" as D
+participant "iamPort" as P
+
+group 포인트 결제
+    User -> C:관리자 페이지(유저권한) 요청\nGET:[/purplaying/iamport]
+
+    activate C
+    C -> S:static asset 요청(HTML/CSS)
+    activate S
+   
+    S --> C: static asset 응답(HTML/CSS)
+
+    User -> C: 포인트충전 버튼 선택
+    C --> User: Modal 포인트충전 노출
+
+    User -> C: 충전할 포인트 선택 및 충전하기 버튼선택
+    C -> S: 포인트 충전요청
+    S -> D: 결제시 필요한 데이터 select 요청
+    D --> S: 결제시 필요한 데이터 select 응답
+    S -> P: iamport 결제요청
+    P --> S: iamport 결제응답
+    S -> D: 결제 완료한 포인트 insert요청
+    D --> S: 결제 완료한 포인트 insert 응답
+
+    S --> C: 포인트 충전응답
+    deactivate S
+    deactivate C
+
+end
+@enduml

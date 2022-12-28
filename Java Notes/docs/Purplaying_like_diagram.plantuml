@@ -32,7 +32,7 @@ group 마이페이지(관심펀딩)
         D -> S: 좋아요 Delete응답 
         S --> C: 좋아요 해제 응답
         deactivate S
-        
+
         C -> C : 관심펀딩 페이지 redirection
         C --> User: 관심펀딩 페이지 노출
         deactivate C
