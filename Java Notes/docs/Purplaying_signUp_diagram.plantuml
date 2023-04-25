@@ -30,7 +30,7 @@ group 회원가입
     S --> C:pw,pw 확인 일치 여부 출력
     deactivate S
 
-    User -> C:이름,연락처 입력
+    User -> C:이름,연락처, 닉네임 입력
     User -> C:약관 동의 선택
     C -> C: 회원가입 버튼 선택
     S -> D: 회원가입 DB insert 요청
